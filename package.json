@@ -1,0 +1,17 @@
+{
+  "name": "event-reminder-manager",
+  "version": "1.0.0",
+  "description": "A full-stack dashboard for birthdays, events, dates, countdowns and reminders.",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.12.4",
+  "scripts": {
+    "dev": "node --watch server.js",
+    "start": "node server.js",
+    "check": "node --check server.js && node --check db.js && node --check routes/events.js && node --check routes/birthdays.js && node --check routes/reminders.js && node --check routes/settings.js && node --check public/js/app.js && node --check public/js/calendar.js && node --check public/js/countdown.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.10.0",
+    "express": "^5.1.0"
+  }
+}
