@@ -1,0 +1,1 @@
+{"routes":[{"path":"/","title":"Dashboard"},{"path":"/#events","title":"Events"},{"path":"/#birthdays","title":"Birthdays"},{"path":"/#calendar","title":"Calendar"},{"path":"/#upcoming","title":"Upcoming Events"},{"path":"/#reminders","title":"Reminders"},{"path":"/#settings","title":"Settings"}]}

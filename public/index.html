@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A calm command center for birthdays, events, dates and reminders.">
+  <title>Event & Reminder Manager</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-mark"><span data-icon="calendar"></span><i></i></div>
+        <div><span class="brand-name">evently</span><span class="brand-caption">date command center</span></div>
+      </div>
+      <div class="sidebar-label">Workspace</div>
+      <nav class="nav-list" aria-label="Primary navigation">
+        <button class="nav-item active" data-view="dashboard"><span data-icon="grid"></span><span>Overview</span></button>
+        <button class="nav-item" data-view="events"><span data-icon="layers"></span><span>All events</span><span class="nav-count" id="eventNavCount">0</span></button>
+        <button class="nav-item" data-action="open-event"><span data-icon="plus-circle"></span><span>Add event</span></button>
+        <button class="nav-item" data-view="birthdays"><span data-icon="cake"></span><span>Birthdays</span></button>
+        <button class="nav-item" data-view="calendar"><span data-icon="calendar-days"></span><span>Calendar</span></button>
+        <button class="nav-item" data-view="upcoming"><span data-icon="sparkles"></span><span>Upcoming</span></button>
+        <button class="nav-item" data-view="reminders"><span data-icon="bell"></span><span>Reminders</span><span class="nav-dot" id="reminderNavDot"></span></button>
+      </nav>
+      <div class="sidebar-bottom">
+        <button class="nav-item" data-view="settings"><span data-icon="settings"></span><span>Settings</span></button>
+        <div class="sidebar-tip">
+          <span class="tip-icon" data-icon="lightbulb"></span>
+          <p><strong>Small habit, big calm</strong><br>Put the next important date somewhere you can see it.</p>
+        </div>
+        <div class="user-mini"><div class="avatar">PB</div><div><strong>Personal workspace</strong><span>Local account</span></div><span data-icon="more-horizontal"></span></div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <button class="mobile-menu" id="mobileMenu" aria-label="Open navigation"><span data-icon="menu"></span></button>
+        <div class="topbar-context"><span class="eyebrow">PERSONAL WORKSPACE</span><span class="context-dot"></span><span class="topbar-date" id="topbarDate"></span></div>
+        <div class="topbar-actions">
+          <label class="global-search"><span data-icon="search"></span><input id="globalSearch" placeholder="Search events..." type="search"><kbd>⌘ K</kbd></label>
+          <button class="icon-button notification-trigger" id="notificationTrigger" aria-label="Show notifications"><span data-icon="bell"></span><i id="notificationBadge"></i></button>
+          <div class="top-avatar">PB</div>
+        </div>
+      </header>
+
+      <section class="page-content" id="appView">
+        <div class="view active" id="view-dashboard">
+          <div class="page-heading dashboard-heading">
+            <div><span class="eyebrow accent">YOUR DATE COMMAND CENTER</span><h1>Keep the important <br><em>dates in view.</em></h1><p class="lede">A clear, calm place for the moments you never want to miss.</p></div>
+            <button class="primary-button" data-action="open-event"><span data-icon="plus"></span>Add an event</button>
+          </div>
+          <div class="stats-grid" id="statsGrid"></div>
+          <div class="dashboard-grid">
+            <section class="panel next-panel">
+              <div class="panel-heading"><div><span class="eyebrow">NEXT UP</span><h2>Your nearest moment</h2></div><button class="ghost-button" data-view="upcoming">View all <span data-icon="arrow-up-right"></span></button></div>
+              <div id="countdownMount"></div>
+              <div class="next-list" id="dashboardUpcoming"></div>
+            </section>
+            <section class="panel reminders-panel">
+              <div class="panel-heading"><div><span class="eyebrow">TODAY</span><h2>Reminders</h2></div><button class="round-button" data-view="reminders" aria-label="Open reminders"><span data-icon="arrow-up-right"></span></button></div>
+              <div id="dashboardReminders" class="compact-list"></div>
+              <button class="panel-link" data-view="reminders">Open reminders <span data-icon="arrow-right"></span></button>
+            </section>
+          </div>
+          <section class="activity-band"><div class="activity-copy"><span class="activity-spark" data-icon="sparkles"></span><div><strong id="activityTitle">Your workspace is ready.</strong><span id="activitySubtitle">Add your first event to start building your timeline.</span></div></div><button class="text-button" data-action="open-event">Add the next thing <span data-icon="arrow-right"></span></button></section>
+        </div>
+
+        <div class="view" id="view-events">
+          <div class="page-heading"><div><span class="eyebrow accent">YOUR TIMELINE</span><h1>All events</h1><p class="lede">Every date, in one clear view.</p></div><button class="primary-button" data-action="open-event"><span data-icon="plus"></span>New event</button></div>
+          <section class="panel list-panel">
+            <div class="toolbar"><div class="toolbar-search"><span data-icon="search"></span><input id="eventSearch" placeholder="Search by name, place or notes..."></div><select id="eventCategoryFilter"><option value="">All categories</option></select><select id="eventRangeFilter"><option value="">Any date</option><option value="next7">Next 7 days</option><option value="next30">Next 30 days</option><option value="past">Past events</option></select></div>
+            <div class="list-header"><span id="eventListSummary">0 events</span><span>Sorted by date</span></div><div id="eventsList" class="stack-list"></div>
+          </section>
+        </div>
+
+        <div class="view" id="view-birthdays">
+          <div class="page-heading"><div><span class="eyebrow accent">PEOPLE TO CELEBRATE</span><h1>Birthdays</h1><p class="lede">Yearly celebrations, remembered effortlessly.</p></div><button class="primary-button" data-action="open-birthday"><span data-icon="plus"></span>Add birthday</button></div>
+          <section class="birthday-hero"><div><span class="eyebrow light">ANNUAL RHYTHM</span><h2>Never miss their day.</h2><p>Birthdays recur automatically, so you only need to add them once.</p></div><div class="hero-orbit"><span>FEB</span><strong>29</strong><small>next celebration</small></div></section>
+          <div id="birthdaysList" class="birthday-grid"></div>
+        </div>
+
+        <div class="view" id="view-calendar">
+          <div class="page-heading"><div><span class="eyebrow accent">DATE MAP</span><h1>Calendar</h1><p class="lede">See the shape of your month at a glance.</p></div><button class="primary-button" data-action="open-event"><span data-icon="plus"></span>Add event</button></div>
+          <section class="panel calendar-panel"><div class="calendar-toolbar"><button class="icon-button" id="prevMonth" aria-label="Previous month"><span data-icon="chevron-left"></span></button><div><span class="eyebrow">MONTH VIEW</span><h2 id="calendarTitle"></h2></div><button class="icon-button" id="nextMonth" aria-label="Next month"><span data-icon="chevron-right"></span></button><button class="ghost-button today-button" id="todayMonth">Today</button></div><div class="calendar-weekdays"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div><div id="calendarGrid" class="calendar-grid"></div><div id="calendarDetails" class="calendar-details"></div></section>
+        </div>
+
+        <div class="view" id="view-upcoming">
+          <div class="page-heading"><div><span class="eyebrow accent">WHAT’S AHEAD</span><h1>Upcoming</h1><p class="lede">A little runway for everything worth preparing for.</p></div><div class="segmented" id="upcomingTabs"><button class="active" data-upcoming-tab="30">Next 30 days</button><button data-upcoming-tab="7">Next 7 days</button><button data-upcoming-tab="birthdays">Birthdays</button></div></div>
+          <section class="panel list-panel"><div class="list-header"><span id="upcomingSummary">Next 30 days</span><span>Nearest first</span></div><div id="upcomingList" class="stack-list roomy"></div></section>
+        </div>
+
+        <div class="view" id="view-reminders">
+          <div class="page-heading"><div><span class="eyebrow accent">NOTIFICATION CENTER</span><h1>Reminders</h1><p class="lede">The quiet nudge before the moment arrives.</p></div><button class="ghost-button" id="requestNotifications"><span data-icon="bell"></span>Enable browser alerts</button></div>
+          <section class="reminder-layout"><div class="panel list-panel"><div class="list-header"><span id="reminderSummary">Today</span><span id="reminderPermission"></span></div><div id="remindersList" class="stack-list roomy"></div></div><aside class="panel reminder-side"><span class="eyebrow">REMINDER RHYTHM</span><h2>Set it once.<br><em>Trust the system.</em></h2><p>Each event can carry a lead time, and recurring dates are handled for you.</p><div class="reminder-rule"><span data-icon="check"></span><div><strong>No duplicate nudges</strong><small>We remember what has already been acknowledged.</small></div></div><div class="reminder-rule"><span data-icon="clock"></span><div><strong>Useful lead times</strong><small>10 min, 30 min, 1 hour, 1 day or 1 week.</small></div></div></aside></section>
+        </div>
+
+        <div class="view" id="view-settings">
+          <div class="page-heading"><div><span class="eyebrow accent">YOUR PREFERENCES</span><h1>Settings</h1><p class="lede">Make the workspace feel like yours.</p></div></div>
+          <div class="settings-grid"><section class="panel settings-card"><div class="settings-title"><div class="setting-icon violet" data-icon="palette"></div><div><h2>Appearance</h2><p>Choose the mood for your workspace.</p></div></div><div class="setting-row"><div><strong>Theme</strong><span>Switch between a dark and light canvas.</span></div><div class="theme-toggle"><button data-theme="dark" class="active">Dark</button><button data-theme="light">Light</button></div></div><div class="setting-row"><div><strong>Date format</strong><span>How dates appear across the app.</span></div><select id="dateFormatSetting"><option>MMM D, YYYY</option><option>DD/MM/YYYY</option><option>MM/DD/YYYY</option></select></div></section><section class="panel settings-card"><div class="settings-title"><div class="setting-icon mint" data-icon="bell"></div><div><h2>Notifications</h2><p>Keep the right signals switched on.</p></div></div><label class="setting-row switch-row"><div><strong>In-app notifications</strong><span>Show reminder nudges inside Evently.</span></div><input type="checkbox" id="inAppSetting"><span class="switch"></span></label><label class="setting-row switch-row"><div><strong>Browser notifications</strong><span>Allow desktop alerts when a reminder is due.</span></div><input type="checkbox" id="browserSetting"><span class="switch"></span></label></section><section class="panel settings-card danger-card"><div class="settings-title"><div class="setting-icon coral" data-icon="archive"></div><div><h2>Workspace care</h2><p>Keep old data from adding noise.</p></div></div><div class="setting-row"><div><strong>Clear completed & old events</strong><span>Removes completed events and dates before today.</span></div><button class="danger-button" id="clearOldButton">Clear old data</button></div></section></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="eventModal" hidden><div class="modal" role="dialog" aria-modal="true" aria-labelledby="eventModalTitle"><button class="modal-close" data-close-modal="eventModal" aria-label="Close"><span data-icon="x"></span></button><span class="eyebrow accent" id="eventModalEyebrow">NEW MOMENT</span><h2 id="eventModalTitle">Add an event</h2><p class="modal-subtitle">Give the next important date a home.</p><form id="eventForm"><input type="hidden" id="eventId"><div class="form-grid"><label class="field wide"><span>Event name <b>*</b></span><input id="eventTitle" required maxlength="120" placeholder="e.g. Mum’s birthday"><small class="field-error" data-error-for="title"></small></label><label class="field"><span>Category <b>*</b></span><select id="eventCategory" required></select></label><label class="field"><span>Reminder</span><select id="eventReminder"></select></label><label class="field"><span>Date <b>*</b></span><input id="eventDate" type="date" required></label><label class="field"><span>Time <b>*</b></span><input id="eventTime" type="time" value="09:00" required></label><label class="field wide"><span>Location</span><input id="eventLocation" maxlength="180" placeholder="Optional place or link"></label><label class="field wide"><span>Description</span><textarea id="eventDescription" rows="3" maxlength="1000" placeholder="A note for future you..."></textarea></label><label class="checkbox-field wide"><input id="eventRecurring" type="checkbox"><span class="fake-checkbox"></span><span><strong>Repeat yearly</strong><small>Useful for birthdays and anniversaries.</small></span></label></div><div class="form-actions"><button type="button" class="ghost-button" data-close-modal="eventModal">Cancel</button><button type="submit" class="primary-button" id="saveEventButton">Save event</button></div></form></div></div>
+
+  <div class="modal-backdrop" id="birthdayModal" hidden><div class="modal compact-modal" role="dialog" aria-modal="true" aria-labelledby="birthdayModalTitle"><button class="modal-close" data-close-modal="birthdayModal" aria-label="Close"><span data-icon="x"></span></button><span class="eyebrow accent">ANNUAL MOMENT</span><h2 id="birthdayModalTitle">Add a birthday</h2><p class="modal-subtitle">One date in, remembered every year.</p><form id="birthdayForm"><input type="hidden" id="birthdayId"><label class="field"><span>Name <b>*</b></span><input id="birthdayName" required maxlength="100" placeholder="e.g. Priya"></label><label class="field"><span>Birth date <b>*</b></span><input id="birthdayDate" type="date" required></label><label class="field"><span>Note</span><textarea id="birthdayNotes" rows="3" maxlength="500" placeholder="Gift idea, tradition, favourite cake..."></textarea></label><div class="form-actions"><button type="button" class="ghost-button" data-close-modal="birthdayModal">Cancel</button><button type="submit" class="primary-button">Save birthday</button></div></form></div></div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"><span class="toast-icon" data-icon="check"></span><span id="toastMessage"></span></div>
+  <script type="module" src="/js/app.js"></script>
+</body>
+</html>
